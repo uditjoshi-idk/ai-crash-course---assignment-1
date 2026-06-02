@@ -43,3 +43,6 @@ if __name__ == "__main__":
     filtered_data = remove_category_with_po(filtered_data)
     print("Categories with 'po order' have been removed.")
     print(filtered_data[filtered_data['categories'].str.lower().str.contains('po order')])
+
+    print("Saving into finalOutput.xlsx")
+    filtered_data.to_excel('finalOutput.xlsx', index=False)
