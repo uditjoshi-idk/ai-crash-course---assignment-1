@@ -33,7 +33,12 @@ def store_embeddings(
     collection = client.get_or_create_collection(name=collection_name)
 
     df["embedding"] = df["embedding"].apply(ast.literal_eval)
-    ids = [f"{row['product_id']}_{row['chunk_id']}" for _, row in df.iterrows()]
+    if "product_id" in df.columns:
+        ids = df["product_id"].astype(str).tolist()
+    elif "id" in df.columns:
+        ids = df["id"].astype(str).tolist()
+    else:
+        ids = [str(i) for i in df.index]
     embeddings = df["embedding"].tolist()
     documents = df["document"].astype(str).tolist()
     metadatas = []

@@ -1,6 +1,5 @@
 import pandas as pd
 from sentence_transformers import SentenceTransformer
-from chunking import chunk_text
 
 def create_embeddings_with_csv(
     data_path,
@@ -22,21 +21,12 @@ def create_embeddings_with_csv(
             f"Specifications: {specs}"
         )
 
-        chunks = chunk_text(
-            combined_text,
-            chunk_size=512,
-            overlap=100
-        )
-
-        for chunk_idx, chunk in enumerate(chunks):
-            texts.append(chunk)
-
-            rows.append({
-                "product_id": str(idx),
-                "chunk_id": chunk_idx,
-                "name": row["name"],
-                "document": chunk
-            })
+        texts.append(combined_text)
+        rows.append({
+            "product_id": str(idx),
+            "name": row["name"],
+            "document": combined_text,
+        })
 
     model = SentenceTransformer(model_name)
     embeddings = model.encode(
